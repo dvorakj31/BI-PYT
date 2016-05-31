@@ -4,10 +4,11 @@ from PIL import Image
 
 
 def crop_image(image_path):
-    input_image = Image.open(image_path)
-    coordinates = (10, 20, 10 + 60, 20 + 50)
-    output_image = input_image.crop(coordinates)
+    with Image.open(image_path) as input_image:
+        width, height = input_image.size
+        output_image = input_image.crop((0, 0, width/2, height))
     return output_image
+
 
 def print_help():
     print("usage: <input image> <output_image>")
