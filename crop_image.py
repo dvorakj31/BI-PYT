@@ -3,6 +3,10 @@ from os import path
 from PIL import Image
 
 
+def add_metadata(output_image, metadata):
+    print("something")
+
+
 def crop_image(image_path):
     with Image.open(image_path) as input_image:
         width, height = input_image.size
