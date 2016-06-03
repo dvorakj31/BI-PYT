@@ -15,11 +15,13 @@ def crop_image(image_path):
 
 
 def print_help():
-    print("usage: <input image> <output_image>")
+    print("--help, -h                                               Prints this information")
+    print("--add, -a <input image> <output image> <metadata file>   Adds metadata to image")
+    print("--extract, -e <input image> <output metadata file>       Extracts metadata from image")
 
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 3 or sys.argv[1] == "-h" or sys.argv[1] == "--help":
         print_help()
         sys.exit(1)
     if not path.exists(sys.argv[1]):
