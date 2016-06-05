@@ -5,15 +5,21 @@ from os import path
 from PIL import Image
 
 
+def extract_metadata(input_image, output_file):
+    with open(input_image, 'rb') as input_file:
+        for byte in input_file:
+            if byte == b"\x00":
+                print("nulovej")
+            else:
+                print(byte)
+
+
 def add_metadata(output_image, metadata):
-    meta = []
-    with open(metadata, 'rb') as input_metadata:
-        for byte in input_metadata:
-            meta.append(byte)
     with open(output_image, 'ab') as output:
-        output.write(b'\0')
-        for byte in meta:
-            output.write(byte)
+        with open(metadata, 'rb') as input_metadata:
+            output.write(b"\x00")
+            for byte in input_metadata:
+                output.write(byte)
 
 
 def crop_image(image_path):
@@ -24,9 +30,10 @@ def crop_image(image_path):
 
 
 def print_help():
-    print("--help, -h                                                     Prints this information")
-    print("--add, -a <input image> <output image> <input metadata file>   Adds metadata to image")
-    print("--extract, -e <input image> <output metadata file>             Extracts metadata from image")
+    print("usage: %s [option] [files]" % sys.argv[0])
+    print("--help, -h                                                     Print this information")
+    print("--add, -a <input image> <output image> <input metadata file>   Add metadata to image")
+    print("--extract, -e <input image> <output metadata file>             Extract metadata from image")
 
 
 def main():
@@ -34,15 +41,24 @@ def main():
         print_help()
         sys.exit(1)
     if not path.exists(sys.argv[2]):
-        raise FileExistsError("File %s does not exists" % sys.argv[2])
+        raise FileNotFoundError("File %s does not exists" % sys.argv[2])
     if sys.argv[1] == "--add" or sys.argv[1] == "-a":
         if len(sys.argv) != 5:
             print_help()
+            sys.exit(2)
         if not path.exists(sys.argv[4]):
-            raise FileExistsError("File %s does not exists" % sys.argv[4])
+            raise FileNotFoundError("File %s does not exists" % sys.argv[4])
         output_image = crop_image(sys.argv[2])
         output_image.save(sys.argv[3])
         add_metadata(sys.argv[3], sys.argv[4])
+    elif sys.argv[1] == "--extract" or sys.argv[1] == "-e":
+        if len(sys.argv) != 4:
+            print_help()
+            sys.exit(2)
+        extract_metadata(sys.argv[2], sys.argv[3])
+    else:
+        print_help()
+        sys.exit(1)
 
 
 if __name__ == "__main__":
