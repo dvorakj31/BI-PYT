@@ -31,7 +31,7 @@ def crop_image(image_path):
 
 def print_help():
     print("usage: %s [option] [files]" % sys.argv[0])
-    print("--help, -h                                                     Print this information")
+    print("--help, -h                                                     Print this informations")
     print("--add, -a <input image> <output image> <input metadata file>   Add metadata to image")
     print("--extract, -e <input image> <output metadata file>             Extract metadata from image")
 
