@@ -7,19 +7,19 @@ from PIL import Image
 
 def extract_metadata(input_image, output_file):
     with open(input_image, 'rb') as input_file:
-        for byte in input_file:
-            if byte.find(b"\x00endbyte\x00") != -1:
-                print(len(byte))
-                print(byte.find(b"\x00endbyte\x00"))
+        for line in input_file:
+            if line.find(b"\x00endbyte\x00") != -1:
+                print(len(line))
+                print(line.find(b"\x00endbyte\x00"))
 
 
 def add_metadata(output_image, metadata):
     with open(output_image, 'a') as output:
         with open(metadata, 'rb') as input_metadata:
-            output.write("\x00endbyte\x00")
+            output.write("\0\0")
             for line in input_metadata:
                 for byte in line:
-                    output.write(str(byte))
+                    output.write(chr(byte))
 
 
 def crop_image(image_path):
