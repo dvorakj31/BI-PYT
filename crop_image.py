@@ -13,12 +13,11 @@ def extract_metadata(input_image, output_file):
             if position != -1:
                 tmp = line.split(b"\xff\xd9\x00")
                 arr = tmp[1:]
-                break
-        with open(output_file, 'wb') as ofile:
-            for x in arr:
-                ofile.write(x)
-            for line in input_file:
-                ofile.write(line)
+                with open(output_file, 'wb') as ofile:
+                    for x in arr:
+                        ofile.write(x)
+                    for line in input_file:
+                        ofile.write(line)
 
 
 def add_metadata(output_image, metadata):
@@ -27,7 +26,6 @@ def add_metadata(output_image, metadata):
             output.write(b"\x00")
             for line in input_metadata:
                 output.write(line)
-            output.write(b"\x00")
 
 
 def crop_image(image_path):
