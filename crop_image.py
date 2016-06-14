@@ -1,8 +1,19 @@
 #!/usr/bin/env python3
+"""
+Skript pro pridani metadat do zadaneho obrazku, ktery se nejdrive rozzrizne v pulce a nasledne se do nej pridaji dana
+metadata.
 
+"""
 import sys
 from os import path
 from PIL import Image
+
+
+"""
+Funkce pro extrahovani metadat ze zadaneho obrazku.
+@:param input_image obrazek s metadaty k extrahovani
+@:param output_file soubor, do ktereho budou metadata zapsany.
+"""
 
 
 def extract_metadata(input_image, output_file):
@@ -20,12 +31,24 @@ def extract_metadata(input_image, output_file):
                         ofile.write(line)
 
 
+"""
+Funkce pro pridani metadat do rozpuleneho obrazku
+@:param output_image rozpuleny obrazek, do ktereho jsou zapisovana metadata.
+@:param metadata metadata, ktera jsou zapsana do rozpuleneho obrazku.
+"""
+
+
 def add_metadata(output_image, metadata):
     with open(output_image, 'ab') as output:
         with open(metadata, 'rb') as input_metadata:
             output.write(b"\x00")
             for line in input_metadata:
                 output.write(line)
+
+"""
+Funkce, ktera rozpuli obrazek.
+@:param cesta k obrazku, ktery ma byt rozpulen
+"""
 
 
 def crop_image(image_path):
@@ -35,11 +58,21 @@ def crop_image(image_path):
     return output_image
 
 
+"""
+Pomocna funkce pro vypisovani napovedy pri pouzivani skriptu
+"""
+
+
 def print_help():
     print("usage: %s [option] [files]" % sys.argv[0])
     print("--help, -h                                                     Print this information")
     print("--add, -a <input image> <output image> <input metadata file>   Add metadata to image")
     print("--extract, -e <input image> <output metadata file>             Extract metadata from image")
+
+
+"""
+Main, ve ktere se rozhoduje, ktera funkce skriptu se bude vykonavat
+"""
 
 
 def main():
