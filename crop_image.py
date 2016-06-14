@@ -8,18 +8,18 @@ from PIL import Image
 def extract_metadata(input_image, output_file):
     with open(input_image, 'rb') as input_file:
         for byte in input_file:
-            if byte == b"\x00":
-                print("nulovej")
-            else:
-                print(byte)
+            if byte.find(b"\x00endbyte\x00") != -1:
+                print(len(byte))
+                print(byte.find(b"\x00endbyte\x00"))
 
 
 def add_metadata(output_image, metadata):
-    with open(output_image, 'ab') as output:
+    with open(output_image, 'a') as output:
         with open(metadata, 'rb') as input_metadata:
-            output.write(b"\x00")
-            for byte in input_metadata:
-                output.write(byte)
+            output.write("\x00endbyte\x00")
+            for line in input_metadata:
+                for byte in line:
+                    output.write(str(byte))
 
 
 def crop_image(image_path):
@@ -31,7 +31,7 @@ def crop_image(image_path):
 
 def print_help():
     print("usage: %s [option] [files]" % sys.argv[0])
-    print("--help, -h                                                     Print this informations")
+    print("--help, -h                                                     Print this information")
     print("--add, -a <input image> <output image> <input metadata file>   Add metadata to image")
     print("--extract, -e <input image> <output metadata file>             Extract metadata from image")
 
